@@ -22,29 +22,34 @@ void FuncForThread1(int a)
 {
     for (int i = 0; i < a; i++)
     {
-        m.lock();
+        //int n;
+        lock_guard<mutex> l(m);
+        //m.lock();
         cout << "\t" << this_thread::get_id() << " sub thread " << i << "\n";
-        m.unlock();
+        //this_thread::sleep_for(1000ms);
+        //m.unlock();
     }
 }
 void FuncForThread2(int a, int b)
 {
     for (int i = a; i < b; i++)
     {
-        m.lock();
+        lock_guard<mutex> l(m);
+        //m.lock();
         cout << "\t" << this_thread::get_id() << " sub thread " << i << "\n";
-        m.unlock();
+        //this_thread::sleep_for(1s);
+        //m.unlock();
     }
 }
 
 int main()
 {
     
-    int n = 100;
-    jthread th1(FuncForThread1, n);
-    jthread th2(FuncForThread2, 300, 400);
+    int n = 50;
+    thread th1(FuncForThread1, n);
+    thread th2(FuncForThread2, 300, 350);
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 50; i++)
     {
         m.lock();
         cout << this_thread::get_id() << " main thread " << i << "\n";
